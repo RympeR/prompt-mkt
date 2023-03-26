@@ -1,0 +1,13 @@
+.app-header .header-item {
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+
+    &:hover {
+        opacity: .8;
+    }
+
+    &:active {
+        opacity: .6;
+    }
+}
