@@ -1,4 +1,6 @@
 import './App.css';
+
+import { AppRouter } from './AppRouter';
 import { Header } from './components/app/header';
 import { HomePage } from './pages/home';
 
@@ -7,7 +9,7 @@ function App() {
     <div className="app">
       <Header />
 
-      <HomePage />
+      <AppRouter />
     </div>
   );
 }
