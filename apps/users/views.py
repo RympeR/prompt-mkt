@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions, views, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from .serializers import CustomUserSerializer, UserRegisterSerializer, UserLoginSerializer
+from .serializers import CustomUserSerializer, UserRegisterSerializer, UserLoginSerializer, UserProfileSerializer
 from .models import User
 from rest_framework.views import APIView
 from rest_framework import status
@@ -36,3 +36,9 @@ class LogoutView(APIView):
     def get(self, request, format=None):
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)
+
+
+class UsernameProfileView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserProfileSerializer
+    lookup_field = 'username'

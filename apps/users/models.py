@@ -67,3 +67,14 @@ class User(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
+
+class Like(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_by')
+
+    def __str__(self):
+        return f'{self.sender.username} likes {self.receiver.username}'
+
+    class Meta:
+        verbose_name = 'Лайк'
+        verbose_name_plural = 'Лайки'

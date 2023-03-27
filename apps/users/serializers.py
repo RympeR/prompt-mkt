@@ -39,3 +39,25 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'new_job_emails', 'new_review_emails', 'new_credits_emails', 'review_reminder_emails', 
             'following_users_new_prompts', 'favorite_prompts'
         )
+
+# ... (existing imports)
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    most_popular_prompts = serializers.SerializerMethodField()
+    newest_prompts = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = (
+            'username', 'amount_of_lookups', 'amount_of_likes', 'sells', 'most_popular_prompts', 'newest_prompts'
+        )
+
+    def get_most_popular_prompts(self, obj):
+        prompts = obj.created_prompts.order_by('-amount_of_lookups')
+        return [{'prompt_name': p.name, 'prompt_category': {'name': p.model_category.name, 'icon': p.model_category.icon}, 'prompt_main_image': p.image.url} for p in prompts]
+
+    def get_newest_prompts(self, obj):
+        prompts = obj.created_prompts.order_by('-creation_date')
+        return [{'prompt_name': p.name, 'prompt_category': {'name': p.model_category.name, 'icon': p.model_category.icon}, 'prompt_main_image': p.image.url} for p in prompts]
+

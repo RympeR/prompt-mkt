@@ -1,12 +1,30 @@
 from django.db import models
 from apps.users.models import User
 
+
+class Category(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+
+
 class ModelCategory(models.Model):
     name = models.CharField(max_length=100)
     icon = models.ImageField(upload_to='model_category_icons/', blank=True, null=True)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Категория модели'
+        verbose_name_plural = 'Категории моделей'
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
@@ -16,6 +34,11 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
+
+
 class Attachment(models.Model):
     file_type = models.CharField(max_length=100)
     _file = models.FileField(upload_to='attachments/')
@@ -23,12 +46,22 @@ class Attachment(models.Model):
     def __str__(self):
         return self.file_type
 
+    class Meta:
+        verbose_name = 'Вложение'
+        verbose_name_plural = 'Вложения'
+
+
 class Rating(models.Model):
     amount_of_stars = models.IntegerField()
     prompt = models.ForeignKey('Prompt', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.amount_of_stars} stars for {self.prompt.name}'
+
+    class Meta:
+        verbose_name = 'Рейтинг'
+        verbose_name_plural = 'Рейтинги'
+
 
 class Prompt(models.Model):
     image = models.ImageField(upload_to='prompt_images/')
@@ -48,6 +81,11 @@ class Prompt(models.Model):
     attachments = models.ManyToManyField(Attachment)
     prompt_template = models.TextField()
     instructions = models.TextField()
+    categories = models.ManyToManyField(Category, related_name='prompts')
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Запрос'
+        verbose_name_plural = 'Запросы'
