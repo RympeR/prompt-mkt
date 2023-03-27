@@ -29,14 +29,16 @@ class RatingSerializer(serializers.ModelSerializer):
 class PromptSerializer(serializers.ModelSerializer):
     model_category = ModelCategorySerializer()
     tags = TagSerializer(many=True)
-    ratings = RatingSerializer()
+    ratings = RatingSerializer(many=True)
     attachments = AttachmentSerializer(many=True)
 
     class Meta:
         model = Prompt
         fields = (
-            'id', 'image', 'model_category', 'price', 'name', 'description', 'token_size', 'example_input', 
-            'example_output', 'user', 'review_amount', 'creation_date', 'tags', 'amount_of_lookups', 'ratings', 
+            'id', 'image', 'model_category', 'price', 'name',
+            'description', 'token_size', 'example_input',
+            'example_output', 'user', 'review_amount',
+            'creation_date', 'tags', 'amount_of_lookups', 'ratings',
             'attachments', 'prompt_template', 'instructions'
         )
 
@@ -54,11 +56,12 @@ class ModelCategoryListSerializer(serializers.ModelSerializer):
 
 
 class MarketplacePromptSerializer(serializers.ModelSerializer):
-    prompt_category = ModelCategoryListSerializer(source='model_category')
+    model_category = ModelCategoryListSerializer()
+    category = CategorySerializer(many=True)
 
     class Meta:
         model = Prompt
-        fields = ('prompt_name', 'prompt_category', 'prompt_main_image')
+        fields = ('name', 'model_category', 'category', 'image')
 
 
 class OrderSerializer(serializers.ModelSerializer):

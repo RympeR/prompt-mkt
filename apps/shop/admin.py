@@ -1,9 +1,16 @@
 from django.contrib import admin
-from .models import ModelCategory, Tag, Attachment, Rating, Prompt
+from .models import ModelCategory, Tag, Attachment, Rating, Prompt, Category
+
 
 @admin.register(ModelCategory)
 class ModelCategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'icon')
+    search_fields = ('name',)
+
+
+@admin.register(Category)
+class ModelCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
     search_fields = ('name',)
 
 @admin.register(Tag)

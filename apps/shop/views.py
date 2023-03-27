@@ -10,7 +10,6 @@ from .serializers import PromptSerializer, MarketplacePromptSerializer, UserOrde
 from django_filters import rest_framework as filters
 
 
-
 class MarketplaceView(generics.ListAPIView):
     queryset = Prompt.objects.all()
     serializer_class = MarketplacePromptSerializer
@@ -43,6 +42,12 @@ class FavoritePromptsView(generics.ListAPIView):
 
 class PromptSearchFilter(filters.CharFilter):
     search_param = 'search'
+
+    def filter_queryset(self, request, queryset, view):
+        search = request.query_params.get(self.search_param, None)
+        if search:
+            return queryset.filter(name__icontains=search)
+        return queryset
 
 
 class MainPageView(generics.ListAPIView):

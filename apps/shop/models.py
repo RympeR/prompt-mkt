@@ -67,6 +67,7 @@ class Prompt(models.Model):
     image = models.ImageField(upload_to='prompt_images/')
     model_category = models.ForeignKey(ModelCategory, on_delete=models.CASCADE)
     sell_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=1)
     name = models.CharField(max_length=100)
     description = models.TextField()
     token_size = models.IntegerField()

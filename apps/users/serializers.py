@@ -6,6 +6,7 @@ from rest_framework.authtoken.models import Token
 
 from apps.shop.models import Prompt
 
+
 class UserFavouritesSerializer(serializers.Serializer):
     favourite = serializers.BooleanField()
     prompt_id = serializers.PrimaryKeyRelatedField(queryset=Prompt.objects.all())
