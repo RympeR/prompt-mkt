@@ -2,12 +2,34 @@
     padding: 10px;
     color: white;
     text-decoration: none;
+    position: relative;
+
+    &::after {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        bottom: 0;
+        height: 2px;
+        background-color: white;
+        content: '';
+        transform-origin: center;
+        transform: scaleX(0);
+        transition: all 0.1s ease;
+        opacity: 0;
+    }
 
     &:hover {
-        opacity: .8;
+        opacity: 1;
     }
 
     &:active {
         opacity: .6;
+    }
+
+    &.active {
+        &::after {
+            transform: scaleX(1);
+            opacity: 1;
+        }
     }
 }

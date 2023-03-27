@@ -10,12 +10,14 @@ html {
   border-bottom: 6px rgba(255, 255, 255, 0) solid;
   background-color: rgb(10, 10, 10);
 }
+
 ::-webkit-scrollbar-thumb {
   border-radius: 8px;
   background: #333;
   border: 4px rgba(255, 255, 255, 0) solid;
   background-clip: padding-box;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #222;
   border: 4px rgba(255, 255, 255, 0) solid;
@@ -26,4 +28,18 @@ html {
   display: flex;
   gap: 5px;
   justify-content: center;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.page {
+  animation: fade-in 300ms;
 }

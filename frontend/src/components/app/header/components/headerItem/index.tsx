@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import './index.scss';
 
 export interface HeaderItemProps {
@@ -6,8 +7,8 @@ export interface HeaderItemProps {
 }
 export function HeaderItem(props: HeaderItemProps) {
   return (
-    <a className='header-item' href={props.link}>
+    <NavLink className='header-item' to={props.link}>
         {props.title}
-    </a>
+    </NavLink>
   );
 }
