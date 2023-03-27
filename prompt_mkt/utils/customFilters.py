@@ -1,6 +1,7 @@
 from django_filters import rest_framework as filters
-from apps.blog.models import Hashtag
+from apps.shop.models import Prompt
 from apps.users.models import User
+
 
 class UserFilter(filters.FilterSet):
     username = filters.CharFilter(lookup_expr='icontains')
@@ -11,11 +12,12 @@ class UserFilter(filters.FilterSet):
             'username',
         )
 
-class HashtagFilter(filters.FilterSet):
+
+class PromptNameFilter(filters.FilterSet):
     name = filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
-        model = Hashtag
+        model = Prompt
         fields = (
             'name',
         )
