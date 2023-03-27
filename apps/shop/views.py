@@ -1,4 +1,5 @@
 from django.db.models import Sum, Avg
+from django_filters import filters
 from rest_framework import generics, permissions
 from rest_framework.filters import OrderingFilter
 from prompt_mkt.utils.customFilters import PromptFilter
@@ -40,15 +41,7 @@ class FavoritePromptsView(generics.ListAPIView):
     serializer_class = PromptSerializer
 
 
-class SettingsView(generics.RetrieveUpdateAPIView):
-    queryset = User.objects.all()
-    serializer_class = CustomUserSerializer
-
-    def get_object(self):
-        return self.request.user
-
-
-class PromptSearchFilter(filters.SearchFilter):
+class PromptSearchFilter(filters.CharFilter):
     search_param = 'search'
 
 

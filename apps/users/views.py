@@ -42,3 +42,66 @@ class UsernameProfileView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
     lookup_field = 'username'
+
+
+
+class SettingsView(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = CustomUserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+# ... (existing imports)
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from rest_framework.authtoken.models import Token
+
+from .serializers import GoogleUserSerializer, TokenSerializer
+
+GOOGLE_CLIENT_ID = 'your-google-client-id'
+
+class GoogleCallbackSignupView(APIView):
+    serializer_class = GoogleUserSerializer
+
+    def post(self, request):
+        try:
+            idinfo = id_token.verify_oauth2_token(request.data['token'], requests.Request(), GOOGLE_CLIENT_ID)
+            email = idinfo['email']
+            username = idinfo['name']
+
+            user = User.objects.filter(email=email).first()
+
+            if user:
+                if user.register_provider == 'google':
+                    token, _ = Token.objects.get_or_create(user=user)
+                    return Response(TokenSerializer(token).data)
+                else:
+                    return Response({'detail': 'Account already exists with a different register provider'}, status=400)
+
+            user = User.objects.create_user(email=email, username=username, register_provider='google')
+            token = Token.objects.create(user=user)
+            return Response(TokenSerializer(token).data, status=201)
+
+        except ValueError:
+            return Response({'detail': 'Invalid token'}, status=400)
+
+class GoogleCallbackLoginView(APIView):
+    serializer_class = GoogleUserSerializer
+
+    def post(self, request):
+        try:
+            idinfo = id_token.verify_oauth2_token(request.data['token'], requests.Request(), GOOGLE_CLIENT_ID)
+            email = idinfo['email']
+
+            user = User.objects.filter(email=email, register_provider='google').first()
+
+            if not user:
+                return Response({'detail': 'User not found'}, status=404)
+
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response(TokenSerializer(token).data)
+
+        except ValueError:
+            return Response({'detail': 'Invalid token'}, status=400)
+

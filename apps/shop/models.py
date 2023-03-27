@@ -66,7 +66,7 @@ class Rating(models.Model):
 class Prompt(models.Model):
     image = models.ImageField(upload_to='prompt_images/')
     model_category = models.ForeignKey(ModelCategory, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    sell_amount = models.DecimalField(max_digits=10, decimal_places=2)
     name = models.CharField(max_length=100)
     description = models.TextField()
     token_size = models.IntegerField()

@@ -5,7 +5,7 @@ from prompt_mkt import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/user/', include('apps.user.urls')),
+    path('api/user/', include('apps.users.urls')),
     path('api/shop/', include('apps.shop.urls')),
     path('', include('apps.front.urls')),
 ]

@@ -61,3 +61,19 @@ class UserProfileSerializer(serializers.ModelSerializer):
         prompts = obj.created_prompts.order_by('-creation_date')
         return [{'prompt_name': p.name, 'prompt_category': {'name': p.model_category.name, 'icon': p.model_category.icon}, 'prompt_main_image': p.image.url} for p in prompts]
 
+
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+
+User = get_user_model()
+
+class GoogleUserSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    username = serializers.CharField()
+    register_provider = serializers.CharField()
+
+class TokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Token
+        fields = ('key',)
