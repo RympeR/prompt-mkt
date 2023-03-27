@@ -4,7 +4,7 @@ import "./index.scss";
 
 export function HomePage() {
   return (
-    <div className="slides">
+    <div className="page home slides">
       <div className="slide flex main">
         <div className="slide-bg"></div>
         <div className="slide-content">
