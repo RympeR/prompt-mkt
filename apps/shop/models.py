@@ -53,7 +53,7 @@ class Attachment(models.Model):
 
 class Rating(models.Model):
     amount_of_stars = models.IntegerField()
-    prompt = models.ForeignKey('Prompt', on_delete=models.CASCADE)
+    prompt = models.ForeignKey('Prompt', on_delete=models.CASCADE, related_name='ratings')
 
     def __str__(self):
         return f'{self.amount_of_stars} stars for {self.prompt.name}'
@@ -77,14 +77,18 @@ class Prompt(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     tags = models.ManyToManyField(Tag)
     amount_of_lookups = models.IntegerField(default=0)
-    ratings = models.ForeignKey(Rating, on_delete=models.SET_NULL, null=True)
     attachments = models.ManyToManyField(Attachment)
     prompt_template = models.TextField()
     instructions = models.TextField()
     categories = models.ManyToManyField(Category, related_name='prompts')
+    favorite_prompts = models.ManyToManyField(User, related_name='favorited_by', blank=True, related_query_name='favorited_by')
 
     def __str__(self):
         return self.name
+
+    @property
+    def average_rating(self):
+        return self.ratings.aggregate(models.Avg('amount_of_stars'))['amount_of_stars__avg']
 
     class Meta:
         verbose_name = 'Запрос'

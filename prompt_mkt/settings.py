@@ -22,7 +22,14 @@ DEBUG = os.environ.get('DJANGO_DEBUG', True)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['*'])
+ALLOWED_HOSTS = [
+    'djangocontainer:8000',
+    'djangocontainer',
+    'localhost',
+    '127.0.0.1',
+    'prompt-mkt.com',
+    'www.prompt-mkt.com',
+]
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000
 
@@ -49,16 +56,21 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.shop',
 ]
+if DEBUG:
+    INSTALLED_APPS += [
+        'hupper',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'prompt_mkt.middle.DisableCSRFMiddleware'
+    # 'django.middleware.csrf.CsrfViewMiddleware',
 ]
 
 ROOT_URLCONF = 'prompt_mkt.urls'
@@ -85,7 +97,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'prompt_mkt.wsgi.application'
-ASGI_APPLICATION = 'core.asgi.application'
+ASGI_APPLICATION = 'prompt_mkt.asgi.application'
 
 
 # Database
@@ -97,7 +109,7 @@ DATABASES = {
         'NAME': 'prompt_mkt',
         'USER': 'prompt_mkt_dev',
         'PASSWORD': 'prompt_mkt_dev',
-        'HOST': 'localhost',
+        'HOST': 'dbcontainer',
         'PORT': '5432',
     }
 }
@@ -107,7 +119,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [REDIS_URL],
+            "hosts": ['redis://rediscontainer:6379/1'],
         },
     },
 }
@@ -116,7 +128,7 @@ CHANNEL_LAYERS = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_URL,
+        "LOCATION": 'redis://rediscontainer:6379/1',
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -176,7 +188,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "users.User"
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "build/static"),
+    # os.path.join(BASE_DIR, "build/static"),
 ]
 
 STATICFILES_FINDERS = [
@@ -186,7 +198,7 @@ STATICFILES_FINDERS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
+        'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
@@ -212,7 +224,7 @@ SIMPLE_JWT = {
 }
 SESSION_COOKIE_SAMESITE = None
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     "accept",

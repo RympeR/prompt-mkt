@@ -25,7 +25,7 @@ class RatingAdmin(admin.ModelAdmin):
 
 @admin.register(Prompt)
 class PromptAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user', 'model_category', 'price', 'token_size', 'creation_date', 'review_amount', 'amount_of_lookups')
+    list_display = ('name', 'user', 'model_category', 'sell_amount', 'token_size', 'creation_date', 'review_amount', 'amount_of_lookups')
     list_filter = ('user', 'model_category', 'tags', 'creation_date')
     search_fields = ('name',)
-    autocomplete_fields = ('user', 'model_category', 'tags', 'ratings', 'attachments', 'favorited_by')
+    autocomplete_fields = ('user', 'model_category', 'tags', 'attachments',)

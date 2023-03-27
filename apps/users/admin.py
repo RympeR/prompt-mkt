@@ -9,10 +9,10 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('username', 'email', 'first_name', 'last_name')
     fieldsets = UserAdmin.fieldsets + (
         ('Additional Information', {'fields': (
-            'avatar', 'background_photo', 'social_links', 'amount_of_lookups', 'amount_of_likes', 'custom_prompt_price', 
+            'avatar', 'background_photo', 'social_links', 'amount_of_lookups', 'custom_prompt_price',
             'register_provider', 'sale_notification_emails', 'new_favorites_emails', 'new_followers_emails', 
             'new_messages_emails', 'new_job_emails', 'new_review_emails', 'new_credits_emails', 'review_reminder_emails', 
-            'following_users_new_prompts', 'favorite_prompts'
+            'following_users_new_prompts',
         )}),
     )
 

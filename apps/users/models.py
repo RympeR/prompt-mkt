@@ -4,15 +4,17 @@ from django.db.models import Count
 
 
 class User(AbstractUser):
+    email = models.EmailField(max_length=50, unique=True)
     username = models.CharField(max_length=50, unique=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     background_photo = models.ImageField(upload_to='background_photos/', blank=True, null=True)
     social_links = models.JSONField(blank=True, null=True)
     amount_of_lookups = models.IntegerField(default=0)
-    amount_of_likes = models.IntegerField(default=0)
     joined_date = models.DateTimeField(auto_now_add=True)
     custom_prompt_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    register_provider = models.CharField(max_length=50, choices=[('email', 'Email'), ('google', 'Google')])
+    register_provider = models.CharField(
+        max_length=50, choices=[('email', 'Email'), ('google', 'Google')], default='email'
+    )
     sale_notification_emails = models.BooleanField(default=True)
     new_favorites_emails = models.BooleanField(default=True)
     new_followers_emails = models.BooleanField(default=True)
@@ -22,7 +24,9 @@ class User(AbstractUser):
     new_credits_emails = models.BooleanField(default=True)
     review_reminder_emails = models.BooleanField(default=True)
     following_users_new_prompts = models.BooleanField(default=True)
-    favorite_prompts = models.ManyToManyField('shop.Prompt', related_name='favorited_by', blank=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.username
@@ -63,6 +67,18 @@ class User(AbstractUser):
         except IndexError:
             return None
 
+    @property
+    def subscriptions(self):
+        return self.subscribed_to.all().values_list('receiver', flat=True)
+
+    @property
+    def subscribers(self):
+        return self.subscribed_by.all().values_list('sender', flat=True)
+
+    @property
+    def amount_of_likes(self):
+        return len(self.liked_by.all())
+
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
@@ -78,3 +94,15 @@ class Like(models.Model):
     class Meta:
         verbose_name = 'Лайк'
         verbose_name_plural = 'Лайки'
+
+
+class Subscription(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscriptions')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscribers')
+
+    def __str__(self):
+        return f'{self.sender.username} subscribed to {self.receiver.username}'
+
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'

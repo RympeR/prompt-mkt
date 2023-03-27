@@ -3,5 +3,5 @@ from .views import (
     IndexView,
 )
 urlpatterns = [
-    re_path('^.*$',IndexView.as_view()),
+    re_path('^(?!api).*$',IndexView.as_view()),
 ]

@@ -37,7 +37,7 @@ class TopPromptEngineersView(generics.ListAPIView):
 
 
 class FavoritePromptsView(generics.ListAPIView):
-    queryset = User.favorite_prompts.through.objects.all()
+    queryset = User.favorited_by.through.objects.all()
     serializer_class = PromptSerializer
 
 
