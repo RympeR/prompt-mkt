@@ -76,6 +76,10 @@ class User(AbstractUser):
         return self.subscribed_by.all().values_list('sender', flat=True)
 
     @property
+    def amount_of_sells(self):
+        return self.orders_created.count()
+
+    @property
     def amount_of_likes(self):
         return len(self.liked_by.all())
 

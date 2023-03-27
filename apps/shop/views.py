@@ -32,7 +32,7 @@ class MarketplaceView(generics.ListAPIView):
 
 
 class TopPromptEngineersView(generics.ListAPIView):
-    queryset = User.objects.annotate(total_sells=Sum('prompt__sell_amount')).order_by('-total_sells')[:4]
+    queryset = User.objects.annotate(total_sells=Sum('prompt_creator__sell_amount')).order_by('-total_sells')[:4]
     serializer_class = CustomUserSerializer
 
 
