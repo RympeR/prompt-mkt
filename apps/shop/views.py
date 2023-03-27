@@ -1,11 +1,11 @@
 from django.db.models import Sum, Avg
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.filters import OrderingFilter
 from prompt_mkt.utils.customFilters import PromptFilter
-from .models import Prompt
+from .models import Prompt, Order
 from apps.users.models import User
 from apps.users.serializers import CustomUserSerializer
-from .serializers import PromptSerializer, MarketplacePromptSerializer
+from .serializers import PromptSerializer, MarketplacePromptSerializer, UserOrderSerializer, OrderSerializer
 from django_filters import rest_framework as filters
 
 
@@ -68,4 +68,17 @@ class PromptDetailView(generics.RetrieveAPIView):
     queryset = Prompt.objects.all()
     serializer_class = PromptSerializer
 
-# Continue with other views based on
+
+class CreateOrderView(generics.CreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class UserOrdersView(generics.ListAPIView):
+    serializer_class = UserOrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(buyer=self.request.user)
+
