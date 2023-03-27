@@ -52,3 +52,9 @@ production-migrate:
 	docker-compose -f docker-compose.prod.yml up -d --build
 	$(PRODUCTION_COMMAND) makemigrations
 	$(PRODUCTION_COMMAND) migrate --noinput
+
+mac-m1-build:
+	docker pull --platform linux/amd64 nginx:latest
+	docker-compose down
+	docker-compose build
+	docker-compose up -d
