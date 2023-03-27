@@ -13,8 +13,7 @@ export function HomePage() {
             Marketplace
           </h1>
           <h3>
-            Find top prompts, produce better results, save on API costs, sell
-            your own prompts.
+            <span>prompt-mkt</span> provides an effective platform for searching, creating or selling custom prompts and allows you to save API costs
           </h3>
           <div className="buttons-group">
             <button className="primary">
