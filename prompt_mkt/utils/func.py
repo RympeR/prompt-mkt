@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.serializers import ModelSerializer
 from django.db.models import QuerySet
 
-from apps.users.dynamic_preferences_registry import WithdrawPercentage
+# from apps.users.dynamic_preferences_registry import WithdrawPercentage
 
 HOST = 'prompt-mkt.com/'
 REF_PERCANTAGE = 0.05
@@ -106,10 +106,10 @@ def return_file_url(serializer, path_file):
     return create_path_file(host, path_file)
 
 
-def sum_by_attribute(obj: object, attrib_name: str, qs: Sequence = [], by_range: bool = False):
-    if by_range:
-        return sum((
-            getattr(obj, attrib_name) * WithdrawPercentage.value()
-            for _ in range(len(qs))
-        ))
-    return sum((getattr(obj, attrib_name) for _ in qs))
+# def sum_by_attribute(obj: object, attrib_name: str, qs: Sequence = [], by_range: bool = False):
+#     if by_range:
+#         return sum((
+#             getattr(obj, attrib_name) * WithdrawPercentage.value()
+#             for _ in range(len(qs))
+#         ))
+#     return sum((getattr(obj, attrib_name) for _ in qs))

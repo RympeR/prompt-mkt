@@ -1,10 +1,28 @@
 from prompt_mkt.utils.customFields import TimestampField
+from prompt_mkt.utils.func import create_path_file
 from .models import User
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from apps.shop.models import Prompt
+from apps.shop.models import Prompt, ModelCategory
+
+
+class CustomModelCategorySerializer(serializers.ModelSerializer):
+    icon = serializers.ImageField(use_url=True, read_only=True)
+
+    class Meta:
+        model = ModelCategory
+        fields = ('id', 'name', 'icon')
+
+
+class CustomPromptSerializer(serializers.ModelSerializer):
+    model_category = CustomModelCategorySerializer()
+    image = serializers.ImageField(use_url=True, read_only=True)
+
+    class Meta:
+        model = Prompt
+        fields = ('id', 'name', 'model_category', 'image')
 
 
 class UserFavouritesSerializer(serializers.Serializer):
@@ -21,7 +39,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
-            email=validated_data['email'],
+            email=validated_data['email'].lower(),
             password=validated_data['password']
         )
         return user
@@ -36,11 +54,21 @@ class UserLoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
     def validate(self, data):
-        user = authenticate(**data)
+        user = authenticate(username=data.get("email").lower(), password=data.get("password"))
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Incorrect Credentials")
 
+
+class UserSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'social_links', 'custom_prompt_price',
+            'sale_notification_emails', 'new_favorites_emails', 'new_followers_emails', 'new_messages_emails',
+            'new_job_emails', 'new_review_emails', 'new_credits_emails', 'review_reminder_emails',
+            'following_users_new_prompts'
+        )
 
 class CustomUserSerializer(serializers.ModelSerializer):
     favorite_prompts = serializers.SerializerMethodField()
@@ -59,18 +87,9 @@ class CustomUserSerializer(serializers.ModelSerializer):
         )
 
     def get_favorite_prompts(self, obj):
-        prompts = obj.favorited_by.all()
-        return [
-            {
-                'prompt_name': p.name,
-                'prompt_category': {
-                    'id': p.model_category.id,
-                    'name': p.model_category.name,
-                    'icon': p.model_category.icon
-                },
-                'prompt_main_image': p.image.url,
-
-            } for p in prompts]
+        return CustomPromptSerializer(
+            obj.favorited_by.all(), many=True, context={'request': self.context.get('request')}
+        ).data
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -93,12 +112,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
         )
 
     def get_most_popular_prompts(self, obj):
-        prompts = obj.prompt_creator.order_by('-amount_of_lookups')
-        return [{'prompt_name': p.name, 'prompt_category': {'name': p.model_category.name, 'icon': p.model_category.icon}, 'prompt_main_image': p.image.url} for p in prompts]
+        return CustomPromptSerializer(
+            obj.prompt_creator.order_by('-amount_of_lookups'), many=True, context={'request': self.context.get('request')}
+        ).data
 
     def get_newest_prompts(self, obj):
-        prompts = obj.prompt_creator.order_by('-creation_date')
-        return [{'prompt_name': p.name, 'prompt_category': {'name': p.model_category.name, 'icon': p.model_category.icon}, 'prompt_main_image': p.image.url} for p in prompts]
+        return CustomPromptSerializer(
+            obj.prompt_creator.order_by('-creation_date'), many=True, context={'request': self.context.get('request')}
+        ).data
 
 
 class GoogleUserSerializer(serializers.Serializer):

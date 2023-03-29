@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions, views
 from prompt_mkt.utils.default_responses import api_created_201, api_block_by_policy_451, api_bad_request_400
 from .serializers import CustomUserSerializer, UserRegisterSerializer, UserLoginSerializer, UserProfileSerializer, \
-    UserFavouritesSerializer, UserPartialSerializer
+    UserFavouritesSerializer, UserPartialSerializer, UserSettingsSerializer
 from .models import User
 from apps.shop.models import Prompt
 from rest_framework.views import APIView
@@ -61,7 +61,7 @@ class MarkFavourite(generics.GenericAPIView):
         user = request.user
         if self.serializer_class(data=data).is_valid():
             prompt = Prompt.objects.get(pk=data['prompt_id'])
-            if data['favourite']:
+            if data.get('favorite'):
                 prompt.favorite_prompts.add(user)
                 return Response(data)
             prompt.favorite_prompts.remove(user)
@@ -88,10 +88,11 @@ class UserPartialUpdateAPI(generics.GenericAPIView, UpdateModelMixin):
 
 class SettingsView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
-    serializer_class = CustomUserSerializer
+    serializer_class = UserSettingsSerializer
 
     def get_object(self):
         return self.request.user
+
 
 # ... (existing imports)
 from google.oauth2 import id_token

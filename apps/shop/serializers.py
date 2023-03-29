@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import ModelCategory, Tag, Attachment, Rating, Prompt, Category, Order
+from ..users.models import User
 
 
 class ModelCategorySerializer(serializers.ModelSerializer):
@@ -17,7 +18,13 @@ class TagSerializer(serializers.ModelSerializer):
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
-        fields = ('id', 'file_type', '_file')
+        fields = 'id', 'file_type', '_file'
+
+
+class AttachmentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attachment
+        fields = 'file_type', '_file'
 
 
 class RatingSerializer(serializers.ModelSerializer):
@@ -40,6 +47,24 @@ class PromptSerializer(serializers.ModelSerializer):
             'example_output', 'user', 'review_amount',
             'creation_date', 'tags', 'amount_of_lookups', 'ratings',
             'attachments', 'prompt_template', 'instructions'
+        )
+
+
+class PromptCreateSerializer(serializers.ModelSerializer):
+    model_category = serializers.PrimaryKeyRelatedField(queryset=ModelCategory.objects.all())
+    categories = serializers.PrimaryKeyRelatedField(many=True, queryset=Category.objects.all())
+    tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all())
+    attachments = serializers.PrimaryKeyRelatedField(many=True, queryset=Attachment.objects.all(), required=False)
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    image = serializers.ImageField()
+
+    class Meta:
+        model = Prompt
+        fields = (
+            'id', 'image', 'model_category', 'price', 'name',
+            'description', 'token_size', 'example_input',
+            'example_output', 'user', 'categories', 'sell_amount',
+            'tags', 'attachments', 'prompt_template', 'instructions'
         )
 
 

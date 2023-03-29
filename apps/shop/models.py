@@ -40,7 +40,8 @@ class Tag(models.Model):
 
 
 class Attachment(models.Model):
-    file_type = models.CharField(max_length=100)
+    file_type = models.CharField(max_length=100,
+                                 choices=(('1', 'Image'), ('2', 'Video'), ('3', 'Audio'), ('4', 'File')))
     _file = models.FileField(upload_to='attachments/')
 
     def __str__(self):
@@ -82,7 +83,8 @@ class Prompt(models.Model):
     prompt_template = models.TextField()
     instructions = models.TextField()
     categories = models.ManyToManyField(Category, related_name='prompts')
-    favorite_prompts = models.ManyToManyField(User, related_name='favorited_by', blank=True, related_query_name='favorited_by')
+    favorite_prompts = models.ManyToManyField(
+        User, related_name='favorited_by', blank=True, related_query_name='favorited_by')
 
     def __str__(self):
         return self.name
