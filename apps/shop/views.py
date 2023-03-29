@@ -1,12 +1,10 @@
 from django.db.models import Sum, Avg
-from django_filters import filters
 from rest_framework import generics, permissions
-from rest_framework.filters import OrderingFilter
 from prompt_mkt.utils.customFilters import PromptFilter
 from .models import Prompt, Order, Attachment
 from apps.users.models import User
 from apps.users.serializers import CustomUserSerializer
-from .serializers import PromptSerializer, MarketplacePromptSerializer, UserOrderSerializer, OrderSerializer, \
+from .serializers import PromptSerializer, UserOrderSerializer, OrderSerializer, \
     AttachmentCreateSerializer, PromptCreateSerializer
 from django_filters import rest_framework as filters
 

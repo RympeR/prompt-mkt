@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions, views
-from prompt_mkt.utils.default_responses import api_created_201, api_block_by_policy_451, api_bad_request_400
+from prompt_mkt.utils.default_responses import api_created_201, api_block_by_policy_451
 from .serializers import CustomUserSerializer, UserRegisterSerializer, UserLoginSerializer, UserProfileSerializer, \
     UserFavouritesSerializer, UserPartialSerializer, UserSettingsSerializer
 from .models import User

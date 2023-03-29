@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import ModelCategory, Tag, Attachment, Rating, Prompt, Category, Order
 from ..users.models import User
 from prompt_mkt.utils.customFields import TimestampField
-from apps.users.serializers import UserProfileSerializer, UserGetProfileSerializer
+from apps.users.serializers import UserGetProfileSerializer
 
 
 class ModelCategorySerializer(serializers.ModelSerializer):
