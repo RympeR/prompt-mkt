@@ -79,7 +79,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'username', 'email', 'first_name', 'last_name', 'avatar', 'background_photo', 'social_links', 
+            'id', 'username', 'email', 'first_name', 'last_name', 'avatar', 'background_photo', 'social_links',
             'amount_of_lookups', 'amount_of_likes', 'joined_date', 'custom_prompt_price', 'register_provider',
             'sale_notification_emails', 'new_favorites_emails', 'new_followers_emails', 'new_messages_emails', 
             'new_job_emails', 'new_review_emails', 'new_credits_emails', 'review_reminder_emails', 
@@ -120,6 +120,23 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return CustomPromptSerializer(
             obj.prompt_creator.order_by('-creation_date'), many=True, context={'request': self.context.get('request')}
         ).data
+
+
+class UserGetProfileSerializer(serializers.ModelSerializer):
+    avatar = serializers.ImageField(use_url=True)
+    background_photo = serializers.ImageField(use_url=True)
+
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            'avatar',
+            'background_photo',
+            'amount_of_lookups',
+            'amount_of_likes',
+            'amount_of_sells',
+        )
+
 
 
 class GoogleUserSerializer(serializers.Serializer):

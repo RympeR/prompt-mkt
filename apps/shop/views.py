@@ -13,15 +13,16 @@ from django_filters import rest_framework as filters
 
 class MarketplaceView(generics.ListAPIView):
     queryset = Prompt.objects.all()
-    serializer_class = MarketplacePromptSerializer
-    filter_backends = [filters.DjangoFilterBackend, OrderingFilter]
+    serializer_class = PromptSerializer
+    filter_backends = [filters.DjangoFilterBackend]
     filterset_class = PromptFilter
-    ordering_fields = ['average_rating', 'creation_date', 'sell_amount']
+    # ordering_fields = ['average_rating', 'creation_date', 'sell_amount']
 
     def get_queryset(self, queryset=None):
+        queryset = super().get_queryset()
         sort_by = self.request.query_params.get('sort_by', None)
         if not sort_by:
-            return Prompt.objects.all()
+            return queryset
         if 'sell_amount' in sort_by:
             queryset = queryset.order_by('-sell_amount')
         if 'average_rating' in sort_by:
