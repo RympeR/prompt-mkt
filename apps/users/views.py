@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions, views
-from prompt_mkt.utils.default_responses import api_created_201, api_block_by_policy_451
+from prompt_mkt.utils.default_responses import api_created_201, api_block_by_policy_451, api_bad_request_400
 from .serializers import CustomUserSerializer, UserRegisterSerializer, UserLoginSerializer, UserProfileSerializer, \
     UserFavouritesSerializer, UserPartialSerializer, UserSettingsSerializer
 from .models import User
@@ -94,56 +94,43 @@ class SettingsView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
 
-# ... (existing imports)
-from google.oauth2 import id_token
-from google.auth.transport import requests
-from rest_framework.authtoken.models import Token
-
-from .serializers import GoogleUserSerializer, TokenSerializer
-
-GOOGLE_CLIENT_ID = 'your-google-client-id'
-
-class GoogleCallbackSignupView(APIView):
-    serializer_class = GoogleUserSerializer
+class GoogleRegisterView(APIView):
 
     def post(self, request):
-        try:
-            idinfo = id_token.verify_oauth2_token(request.data['token'], requests.Request(), GOOGLE_CLIENT_ID)
-            email = idinfo['email']
-            username = idinfo['name']
+        data = request.data
+        if not data.get('Ca'):
+            return api_bad_request_400({'status': 'unknown'})
 
-            user = User.objects.filter(email=email).first()
+        g_user_id = data['googleId']
+        g_email = data['profileObj']['email']
+        g_name = data['profileObj']['name']
+        if g_name and len(g_name.split(" ")) == 1:
+            username = g_name
+        else:
+            username = ''.join(g_name.split(" ")).lower()
+        if User.objects.filter(email=g_email).first():
+            return api_bad_request_400({'status': 'already exists email'})
+        User.create_user(
+            g_email,
+            g_email,
+            username=username,
+            google_id=g_user_id,
+            register_provider='google'
+        )
+        token, _ = Token.objects.get_or_create(user=user)
+        return api_created_201({'token': token.key})
 
-            if user:
-                if user.register_provider == 'google':
-                    token, _ = Token.objects.get_or_create(user=user)
-                    return Response(TokenSerializer(token).data)
-                else:
-                    return Response({'detail': 'Account already exists with a different register provider'}, status=400)
 
-            user = User.objects.create_user(email=email, username=username, register_provider='google')
-            token = Token.objects.create(user=user)
-            return Response(TokenSerializer(token).data, status=201)
-
-        except ValueError:
-            return Response({'detail': 'Invalid token'}, status=400)
-
-class GoogleCallbackLoginView(APIView):
-    serializer_class = GoogleUserSerializer
+class GoogleLoginView(APIView):
 
     def post(self, request):
-        try:
-            idinfo = id_token.verify_oauth2_token(request.data['token'], requests.Request(), GOOGLE_CLIENT_ID)
-            email = idinfo['email']
+        data = request.data
+        if not data.get('Ca'):
+            return api_bad_request_400({'status': 'unknown'})
 
-            user = User.objects.filter(email=email, register_provider='google').first()
-
-            if not user:
-                return Response({'detail': 'User not found'}, status=404)
-
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response(TokenSerializer(token).data)
-
-        except ValueError:
-            return Response({'detail': 'Invalid token'}, status=400)
-
+        g_email = data['profileObj']['email']
+        user = User.objects.filter(email=g_email).first()
+        if not user or user.register_provider != 'google':
+            return api_bad_request_400({'status': 'already exists email'})
+        token, _ = Token.objects.get_or_create(user=user)
+        return api_accepted_202({'token': token.key})

@@ -24,6 +24,7 @@ class User(AbstractUser):
     new_credits_emails = models.BooleanField(default=True)
     review_reminder_emails = models.BooleanField(default=True)
     following_users_new_prompts = models.BooleanField(default=True)
+    google_id = models.CharField(max_length=50, blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

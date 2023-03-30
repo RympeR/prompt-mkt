@@ -9,8 +9,8 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('settings/', views.SettingsView.as_view(), name='settings'),
     path('profile/<str:username>/', views.UsernameProfileView.as_view(), name='username_profile'),
-    path('google-callback-signup/', views.GoogleCallbackSignupView.as_view(), name='google_callback_signup'),
-    path('google-callback-login/', views.GoogleCallbackLoginView.as_view(), name='google_callback_login'),
+    path('google-callback-signup/', views.GoogleRegisterView.as_view(), name='google_callback_signup'),
+    path('google-callback-login/', views.GoogleLoginView.as_view(), name='google_callback_login'),
     path('partial-update/', views.UserPartialUpdateAPI.as_view(), name='partial_update'),
     path('favorite/', views.MarkFavourite.as_view(), name='favorite'),
 ]
