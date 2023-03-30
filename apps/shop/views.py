@@ -14,7 +14,6 @@ class MarketplaceView(generics.ListAPIView):
     serializer_class = PromptSerializer
     filter_backends = [filters.DjangoFilterBackend]
     filterset_class = PromptFilter
-    # ordering_fields = ['average_rating', 'creation_date', 'sell_amount']
 
     def get_queryset(self, queryset=None):
         queryset = super().get_queryset()
