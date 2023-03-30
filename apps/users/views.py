@@ -1,5 +1,8 @@
 from rest_framework import generics, permissions, views
-from prompt_mkt.utils.default_responses import api_created_201, api_block_by_policy_451, api_bad_request_400
+from rest_framework.authtoken.models import Token
+
+from prompt_mkt.utils.default_responses import api_created_201, api_block_by_policy_451, api_bad_request_400, \
+    api_accepted_202
 from .serializers import CustomUserSerializer, UserRegisterSerializer, UserLoginSerializer, UserProfileSerializer, \
     UserFavouritesSerializer, UserPartialSerializer, UserSettingsSerializer
 from .models import User
@@ -110,7 +113,7 @@ class GoogleRegisterView(APIView):
             username = ''.join(g_name.split(" ")).lower()
         if User.objects.filter(email=g_email).first():
             return api_bad_request_400({'status': 'already exists email'})
-        User.create_user(
+        user = User.create_user(
             g_email,
             g_email,
             username=username,
