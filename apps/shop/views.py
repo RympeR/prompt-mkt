@@ -10,7 +10,9 @@ from apps.users.serializers import CustomUserSerializer
 from .serializers import PromptSerializer, UserOrderSerializer, OrderSerializer, \
     AttachmentCreateSerializer, PromptCreateSerializer, PromptLikeCreateSerializer, TagSerializer
 from django_filters import rest_framework as filters
-
+from prompt_mkt.utils.wayforpay.wayforpay import PaymentRequests
+import calendar
+import time
 
 class MarketplaceView(generics.ListAPIView):
     queryset = Prompt.objects.all()
@@ -128,3 +130,43 @@ class CreateTagView(generics.CreateAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class GeneratePaymentWidget(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        data = request.data
+        wayforpay = PaymentRequests(
+            merchant_account='test_merch_n1',
+            merchant_key='secret',
+            merchant_domain='http://localhost:8000',
+            merchant_password='secret'
+        )
+
+        ts = calendar.timegm(time.gmtime())
+        product_names = data['product_names'] #['value', 'value2']
+        product_cost = data['product_cost'] #['1', '2']
+        product_count = data['product_count'] # ['1', '1']
+        widget_data = {
+            'orderReference': ts,
+            'orderDate': ts,
+            'amount': str(data['amount']), # '3'
+            'currency': data['currency'], #UAH
+            'productName': product_names,
+            'productPrice': product_cost,
+            'serviceUrl': 'http://127.0.0.1:8000/finish-order/',
+            'returnUrl': 'http://127.0.0.1:8000/finish-order/',
+            'productCount': product_count,
+            'language': data['language'], #uk
+            'straightWidget': True
+        }
+        widget = wayforpay.generateWidgetJson(widget_data)
+        order = Order.objects.filter(pk=data['order_pk']).first()
+        order.status = '1'
+        order.save()
+        if not order:
+            return api_not_found_404({'status': 'error', 'message': 'Order not found'})
+        if order.buyer != request.user:
+            return api_not_found_404({'status': 'error', 'message': 'Order not found'})
+        return api_accepted_202({'status': 'ok', 'payment_object': widget, 'order_pk': data['order_pk']})

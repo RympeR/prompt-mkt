@@ -15,4 +15,5 @@ urlpatterns = [
     path('delete-prompt-like/<int:pk>', views.DeletePromptLikeView.as_view(), name='delete_prompt_like'),
     path('update-prompt-lookups/', views.UpdatePromptLookups.as_view(), name='update_user_lookups'),
     path('create-prompt-tag/', views.CreateTagView.as_view(), name='create_prompt_tag'),
+    path('generate-payment-widget/', views.GeneratePaymentWidget.as_view(), name='generate_payment_widget'),
 ]

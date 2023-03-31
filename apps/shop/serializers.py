@@ -99,7 +99,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('buyer', 'prompt', 'creator', 'price', 'created_at')
+        fields = ('pk', 'buyer', 'prompt', 'creator', 'price', 'created_at')
 
 
 class UserOrderSerializer(serializers.ModelSerializer):
