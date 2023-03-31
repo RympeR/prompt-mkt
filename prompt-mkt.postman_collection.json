@@ -628,6 +628,40 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Finish Order",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{prompt_mkt_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "order_pk",
+											"value": "6",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}{{shop_prefix}}/finish-order/",
+									"host": [
+										"{{host}}{{shop_prefix}}"
+									],
+									"path": [
+										"finish-order",
+										""
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},

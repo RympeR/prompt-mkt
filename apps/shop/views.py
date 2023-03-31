@@ -170,3 +170,18 @@ class GeneratePaymentWidget(APIView):
         if order.buyer != request.user:
             return api_not_found_404({'status': 'error', 'message': 'Order not found'})
         return api_accepted_202({'status': 'ok', 'payment_object': widget, 'order_pk': data['order_pk']})
+
+
+class FinishOrder(APIView):
+    permissions_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        data = request.data
+        order = Order.objects.filter(pk=data['order_pk']).first()
+        if not order:
+            return api_not_found_404({'status': 'error', 'message': 'Order not found'})
+        if order.buyer != request.user:
+            return api_not_found_404({'status': 'error', 'message': 'Order not found'})
+        order.status = '2'
+        order.save()
+        return api_accepted_202({'status': 'ok', 'message': 'Order successfully paid'})
