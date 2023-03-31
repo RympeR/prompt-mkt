@@ -2,11 +2,11 @@ from rest_framework import generics, permissions, views
 from rest_framework.authtoken.models import Token
 
 from prompt_mkt.utils.default_responses import api_created_201, api_block_by_policy_451, api_bad_request_400, \
-    api_accepted_202
+    api_accepted_202, api_not_found_404
 from .serializers import CustomUserSerializer, UserRegisterSerializer, UserLoginSerializer, UserProfileSerializer, \
-    UserFavouritesSerializer, UserPartialSerializer, UserSettingsSerializer, SubscriptionCreateSerializer, \
-    UserGetProfileSerializer
-from .models import User, Subscription
+    UserFavouritesSerializer, UserPartialSerializer, UserSettingsSerializer, \
+    UserGetProfileSerializer, SubscriptionCreateSerializer, LikeCreateSerializer
+from .models import User, Subscription, Like
 from apps.shop.models import Prompt
 from rest_framework.views import APIView
 from rest_framework import status
@@ -146,6 +146,37 @@ class CreateSubscriptionsView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
+class CreateLikeView(generics.CreateAPIView):
+    queryset = Like.objects.all()
+    serializer_class = LikeCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+
+class DeleteSubscriptionsView(generics.DestroyAPIView):
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return Subscription.objects.get(
+            sender=self.request.user,
+            receiver=User.objects.get(username=self.kwargs['username'])
+        )
+
+
+class DeleteLikeView(generics.DestroyAPIView):
+    queryset = Subscription.objects.all()
+    serializer_class = LikeCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return Like.objects.get(
+            sender=self.request.user,
+            receiver=User.objects.get(username=self.kwargs['username'])
+        )
+
+
 class GetMySubscriptionsView(generics.ListAPIView):
     serializer_class = UserGetProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -160,3 +191,17 @@ class GetMySubscribersView(generics.ListAPIView):
 
     def get_queryset(self):
         return User.objects.filter(subscriptions__receiver=self.request.user)
+
+
+class UpdateUserLookups(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        username = request.query_params.get('username')
+        user = User.objects.filter(username=username).first()
+        if not user:
+            return api_not_found_404({'status': 'error', 'message': 'User not found'})
+        if request.user != user:
+            user.amount_of_lookups += 1
+            user.save()
+        return api_accepted_202({'status': 'ok', 'amount_of_lookups': user.amount_of_lookups, 'username': username})

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "05e452a9-7973-4d96-82cc-cb87b7c8cd81",
+		"_postman_id": "99b4ac10-0462-481d-adee-484dea439b83",
 		"name": "prompt-mkt",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "12799575"
@@ -248,6 +248,234 @@
 									"path": [
 										"partial-update",
 										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lookups Update",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{prompt_mkt_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}{{user_prefix}}/update-user-lookups/?username=root",
+									"host": [
+										"{{host}}{{user_prefix}}"
+									],
+									"path": [
+										"update-user-lookups",
+										""
+									],
+									"query": [
+										{
+											"key": "username",
+											"value": "root"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create UserLike",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{prompt_mkt_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "sender",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "receiver",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}{{user_prefix}}/create-user-like/",
+									"host": [
+										"{{host}}{{user_prefix}}"
+									],
+									"path": [
+										"create-user-like",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User Like",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{prompt_mkt_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file_type",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "_file",
+											"type": "file",
+											"src": "/C:/Users/georg/Desktop/Screenshot_1.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}{{user_prefix}}/delete-user-like/root",
+									"host": [
+										"{{host}}{{user_prefix}}"
+									],
+									"path": [
+										"delete-user-like",
+										"root"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Subscriptions",
+					"item": [
+						{
+							"name": "Subscription",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{prompt_mkt_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "sender",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "receiver",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}{{user_prefix}}/subscribe/",
+									"host": [
+										"{{host}}{{user_prefix}}"
+									],
+									"path": [
+										"subscribe",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get my subscribers",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{prompt_mkt_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}{{user_prefix}}/get-my-subscribers/",
+									"host": [
+										"{{host}}{{user_prefix}}"
+									],
+									"path": [
+										"get-my-subscribers",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get my subscriptions",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{prompt_mkt_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}{{user_prefix}}/get-my-subscriptions/",
+									"host": [
+										"{{host}}{{user_prefix}}"
+									],
+									"path": [
+										"get-my-subscriptions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove subscription",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{prompt_mkt_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{host}}{{user_prefix}}/unsubscribe/root",
+									"host": [
+										"{{host}}{{user_prefix}}"
+									],
+									"path": [
+										"unsubscribe",
+										"root"
 									]
 								}
 							},
@@ -602,6 +830,114 @@
 									"path": [
 										"create-attachment",
 										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Prompt Like",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{prompt_mkt_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "sender",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "receiver",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}{{shop_prefix}}/create-prompt-like/",
+									"host": [
+										"{{host}}{{shop_prefix}}"
+									],
+									"path": [
+										"create-prompt-like",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Prompt Like",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{prompt_mkt_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file_type",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "_file",
+											"type": "file",
+											"src": "/C:/Users/georg/Desktop/Screenshot_1.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}{{shop_prefix}}/delete-prompt-like/1",
+									"host": [
+										"{{host}}{{shop_prefix}}"
+									],
+									"path": [
+										"delete-prompt-like",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lookups Prompt Update",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{prompt_mkt_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}{{shop_prefix}}/update-prompt-lookups/?pk=2",
+									"host": [
+										"{{host}}{{shop_prefix}}"
+									],
+									"path": [
+										"update-prompt-lookups",
+										""
+									],
+									"query": [
+										{
+											"key": "pk",
+											"value": "2"
+										}
 									]
 								}
 							},

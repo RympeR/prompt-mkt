@@ -1,6 +1,5 @@
 from prompt_mkt.utils.customFields import TimestampField
-from prompt_mkt.utils.func import create_path_file
-from .models import User, Subscription
+from .models import User, Subscription, Like
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -195,9 +194,29 @@ class UserPartialSerializer(serializers.ModelSerializer):
         )
 
 
+class LikeCreateSerializer(serializers.ModelSerializer):
+    sender = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    receiver = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    creation_date = TimestampField(required=False)
+
+    class Meta:
+        model = Like
+        fields = '__all__'
+
+
 class SubscriptionCreateSerializer(serializers.ModelSerializer):
     sender = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     receiver = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    creation_date = TimestampField(required=False)
+
+    class Meta:
+        model = Subscription
+        fields = '__all__'
+
+
+class SubscriptionsGetSerializer(serializers.ModelSerializer):
+    sender = UserGetProfileSerializer()
+    receiver = UserGetProfileSerializer()
 
     class Meta:
         model = Subscription

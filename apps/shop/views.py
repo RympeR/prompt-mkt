@@ -1,11 +1,14 @@
 from django.db.models import Sum, Avg
 from rest_framework import generics, permissions
+from rest_framework.views import APIView
+
 from prompt_mkt.utils.customFilters import PromptFilter
-from .models import Prompt, Order, Attachment
+from prompt_mkt.utils.default_responses import api_accepted_202, api_not_found_404
+from .models import Prompt, Order, Attachment, PromptLike
 from apps.users.models import User, Subscription
 from apps.users.serializers import CustomUserSerializer
 from .serializers import PromptSerializer, UserOrderSerializer, OrderSerializer, \
-    AttachmentCreateSerializer, PromptCreateSerializer
+    AttachmentCreateSerializer, PromptCreateSerializer, PromptLikeCreateSerializer
 from django_filters import rest_framework as filters
 
 
@@ -90,3 +93,32 @@ class CreateAttachmentView(generics.CreateAPIView):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class CreatePromptLikeView(generics.CreateAPIView):
+    queryset = PromptLike.objects.all()
+    serializer_class = PromptLikeCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class DeletePromptLikeView(generics.DestroyAPIView):
+    queryset = PromptLike.objects.all()
+    serializer_class = PromptLikeCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.queryset.filter(sender=self.request.user, receiver__pk=self.kwargs['pk']).first()
+
+class UpdatePromptLookups(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        pk = request.query_params.get('pk')
+
+        prompt = Prompt.objects.filter(pk=pk).first()
+        if not prompt:
+            return api_not_found_404({'status': 'error', 'message': 'Prompt not found'})
+        if request.user != prompt.user:
+            prompt.amount_of_lookups += 1
+            prompt.save()
+        return api_accepted_202({'status': 'ok', 'amount_of_lookups': prompt.amount_of_lookups, 'pk': pk})
