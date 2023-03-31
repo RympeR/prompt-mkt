@@ -2,9 +2,8 @@ FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-
+#    python3 \
 RUN apt-get update && apt-get install -y \
-    python3 \
     python3-pip \
     libpq-dev \
     libjpeg-dev \
@@ -16,7 +15,6 @@ RUN pip install --upgrade pip
 COPY requirements.txt /app/requirements.txt
 RUN pip install wheel
 RUN pip install -r /app/requirements.txt
-RUN pip install hupper
 COPY . /app
 WORKDIR /app
 COPY configs/prompt-mkt.conf /etc/nginx/conf.d/default.conf

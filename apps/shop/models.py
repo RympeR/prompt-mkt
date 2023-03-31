@@ -40,7 +40,8 @@ class Tag(models.Model):
 
 
 class Attachment(models.Model):
-    file_type = models.CharField(max_length=100)
+    file_type = models.CharField(max_length=100,
+                                 choices=(('1', 'Image'), ('2', 'Video'), ('3', 'Audio'), ('4', 'File')))
     _file = models.FileField(upload_to='attachments/')
 
     def __str__(self):
@@ -82,7 +83,8 @@ class Prompt(models.Model):
     prompt_template = models.TextField()
     instructions = models.TextField()
     categories = models.ManyToManyField(Category, related_name='prompts')
-    favorite_prompts = models.ManyToManyField(User, related_name='favorited_by', blank=True, related_query_name='favorited_by')
+    favorite_prompts = models.ManyToManyField(
+        User, related_name='favorited_by', blank=True, related_query_name='favorited_by')
 
     def __str__(self):
         return self.name
@@ -102,6 +104,24 @@ class Order(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders_created')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=100, default='0',
+                              choices=(
+                                  ('0', 'Waiting payment'), ('1', 'In progress'), ('2', 'Completed'), ('3', 'Canceled'))
+                              )
 
     def __str__(self):
         return f"Order {self.id} - {self.buyer.username} - {self.prompt.name}"
+
+
+class PromptLike(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='prompt_likes')
+    receiver = models.ForeignKey(Prompt, on_delete=models.CASCADE, related_name='prompt_liked_by')
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.sender.username} likes {self.receiver.name}'
+
+    class Meta:
+        verbose_name = 'Лайк'
+        verbose_name_plural = 'Лайки'
+        unique_together = ('sender', 'receiver')

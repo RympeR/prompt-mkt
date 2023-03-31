@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+from .models import User, Like, Subscription
 
 class CustomUserAdmin(UserAdmin):
     model = User
@@ -16,5 +16,11 @@ class CustomUserAdmin(UserAdmin):
         )}),
     )
 
-admin.site.register(User, CustomUserAdmin)
+@admin.register(Subscription)
+@admin.register(Like)
+class TwoUserActionsAdmin(admin.ModelAdmin):
+    model = Like
+    list_display = ('sender', 'receiver', 'created_date')
+    search_fields = ('sender__username', 'receiver__username', 'sender__email', 'receiver__email')
 
+admin.site.register(User, CustomUserAdmin)

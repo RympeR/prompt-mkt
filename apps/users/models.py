@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import Count
@@ -24,6 +26,7 @@ class User(AbstractUser):
     new_credits_emails = models.BooleanField(default=True)
     review_reminder_emails = models.BooleanField(default=True)
     following_users_new_prompts = models.BooleanField(default=True)
+    google_id = models.CharField(max_length=50, blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -91,6 +94,7 @@ class User(AbstractUser):
 class Like(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_by')
+    created_date = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
         return f'{self.sender.username} likes {self.receiver.username}'
@@ -98,11 +102,13 @@ class Like(models.Model):
     class Meta:
         verbose_name = 'Лайк'
         verbose_name_plural = 'Лайки'
+        unique_together = ('sender', 'receiver')
 
 
 class Subscription(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscriptions')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscribers')
+    created_date = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
         return f'{self.sender.username} subscribed to {self.receiver.username}'
@@ -110,3 +116,4 @@ class Subscription(models.Model):
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
+        unique_together = ('sender', 'receiver')
