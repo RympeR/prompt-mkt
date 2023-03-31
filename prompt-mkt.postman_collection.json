@@ -265,7 +265,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{host}}{{user_prefix}}/update-user-lookups/?username=root",
+									"raw": "{{host}}{{user_prefix}}/update-user-lookups/?username=root2",
 									"host": [
 										"{{host}}{{user_prefix}}"
 									],
@@ -276,7 +276,7 @@
 									"query": [
 										{
 											"key": "username",
-											"value": "root"
+											"value": "root2"
 										}
 									]
 								}
@@ -299,7 +299,7 @@
 									"formdata": [
 										{
 											"key": "sender",
-											"value": "1",
+											"value": "2",
 											"type": "text"
 										},
 										{
@@ -938,6 +938,50 @@
 											"key": "pk",
 											"value": "2"
 										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create tag",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{prompt_mkt_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "is_system",
+											"value": "False",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "test_tag",
+											"type": "text"
+										},
+										{
+											"key": "icon",
+											"type": "file",
+											"src": "/C:/Users/georg/Desktop/Screenshot_1.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}{{shop_prefix}}/create-prompt-tag/",
+									"host": [
+										"{{host}}{{shop_prefix}}"
+									],
+									"path": [
+										"create-prompt-tag",
+										""
 									]
 								}
 							},

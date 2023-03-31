@@ -4,11 +4,11 @@ from rest_framework.views import APIView
 
 from prompt_mkt.utils.customFilters import PromptFilter
 from prompt_mkt.utils.default_responses import api_accepted_202, api_not_found_404
-from .models import Prompt, Order, Attachment, PromptLike
-from apps.users.models import User, Subscription
+from .models import Prompt, Order, Attachment, PromptLike, Tag
+from apps.users.models import User
 from apps.users.serializers import CustomUserSerializer
 from .serializers import PromptSerializer, UserOrderSerializer, OrderSerializer, \
-    AttachmentCreateSerializer, PromptCreateSerializer, PromptLikeCreateSerializer
+    AttachmentCreateSerializer, PromptCreateSerializer, PromptLikeCreateSerializer, TagSerializer
 from django_filters import rest_framework as filters
 
 
@@ -122,3 +122,9 @@ class UpdatePromptLookups(APIView):
             prompt.amount_of_lookups += 1
             prompt.save()
         return api_accepted_202({'status': 'ok', 'amount_of_lookups': prompt.amount_of_lookups, 'pk': pk})
+
+
+class CreateTagView(generics.CreateAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    permission_classes = [permissions.IsAuthenticated]
