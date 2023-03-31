@@ -1,6 +1,6 @@
 from prompt_mkt.utils.customFields import TimestampField
 from prompt_mkt.utils.func import create_path_file
-from .models import User
+from .models import User, Subscription
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -129,6 +129,7 @@ class UserGetProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
+            'id',
             'username',
             'avatar',
             'background_photo',
@@ -192,3 +193,12 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'review_reminder_emails',
             'following_users_new_prompts',
         )
+
+
+class SubscriptionCreateSerializer(serializers.ModelSerializer):
+    sender = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    receiver = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    class Meta:
+        model = Subscription
+        fields = '__all__'

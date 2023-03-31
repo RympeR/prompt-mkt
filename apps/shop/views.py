@@ -2,7 +2,7 @@ from django.db.models import Sum, Avg
 from rest_framework import generics, permissions
 from prompt_mkt.utils.customFilters import PromptFilter
 from .models import Prompt, Order, Attachment
-from apps.users.models import User
+from apps.users.models import User, Subscription
 from apps.users.serializers import CustomUserSerializer
 from .serializers import PromptSerializer, UserOrderSerializer, OrderSerializer, \
     AttachmentCreateSerializer, PromptCreateSerializer

@@ -13,4 +13,7 @@ urlpatterns = [
     path('google-callback-login/', views.GoogleLoginView.as_view(), name='google_callback_login'),
     path('partial-update/', views.UserPartialUpdateAPI.as_view(), name='partial_update'),
     path('favorite/', views.MarkFavourite.as_view(), name='favorite'),
+    path('get-my-subscribers/', views.GetMySubscribersView.as_view(), name='my_subscribers'),
+    path('get-my-subscriptions/', views.GetMySubscriptionsView.as_view(), name='my_subscriptions'),
+    path('subscribe/', views.CreateSubscriptionsView.as_view(), name='subscribe'),
 ]

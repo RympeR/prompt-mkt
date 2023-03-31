@@ -4,8 +4,9 @@ from rest_framework.authtoken.models import Token
 from prompt_mkt.utils.default_responses import api_created_201, api_block_by_policy_451, api_bad_request_400, \
     api_accepted_202
 from .serializers import CustomUserSerializer, UserRegisterSerializer, UserLoginSerializer, UserProfileSerializer, \
-    UserFavouritesSerializer, UserPartialSerializer, UserSettingsSerializer
-from .models import User
+    UserFavouritesSerializer, UserPartialSerializer, UserSettingsSerializer, SubscriptionCreateSerializer, \
+    UserGetProfileSerializer
+from .models import User, Subscription
 from apps.shop.models import Prompt
 from rest_framework.views import APIView
 from rest_framework import status
@@ -137,3 +138,25 @@ class GoogleLoginView(APIView):
             return api_bad_request_400({'status': 'already exists email'})
         token, _ = Token.objects.get_or_create(user=user)
         return api_accepted_202({'token': token.key})
+
+
+class CreateSubscriptionsView(generics.CreateAPIView):
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class GetMySubscriptionsView(generics.ListAPIView):
+    serializer_class = UserGetProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return User.objects.filter(subscriptions__sender=self.request.user)
+
+
+class GetMySubscribersView(generics.ListAPIView):
+    serializer_class = UserGetProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return User.objects.filter(subscriptions__receiver=self.request.user)
