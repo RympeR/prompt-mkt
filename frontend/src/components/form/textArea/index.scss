@@ -1,0 +1,189 @@
+.form-textarea-wrapper {
+    box-sizing: border-box;
+    position: relative;
+
+    p.textarea-error {
+        color: var(--ui-error);
+        margin-top: 0.125rem;
+        margin-bottom: 0;
+        text-align: left;
+        transition: opacity 0.3s ease, height 0.02s linear;
+        height: 1.5rem;
+        overflow: hidden;
+    }
+
+    .form-textarea {
+        width: fit-content;
+        position: relative;
+        display: flex;
+        height: fit-content;
+    }
+
+    .icon {
+        position: absolute;
+        background-color: var(--ui-overlay-light);
+        height: 1.875rem;
+        width: 1.875rem;
+        border-radius: 0.3rem;
+        left: 0.25rem;
+        top: 0.25rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+
+        &::after {
+            position: absolute;
+            right: -0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 0.125rem;
+            height: 1.25rem;
+            margin: auto;
+            border-radius: 0.625rem;
+            content: '';
+            background-color: var(--ui-overlay-dark-min);
+        }
+
+        +textarea {
+            padding-left: 3rem;
+        }
+    }
+
+    .counter {
+        height: 100%;
+        margin-top: auto;
+        padding-left: 10px;
+    }
+
+    .info-button-wrapper {
+        margin-left: 0.5rem;
+    }
+
+    .links {
+        justify-content: flex-end;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 100%;
+        margin-bottom: 1.25rem;
+        gap: 0.5rem;
+
+        a {
+            text-decoration: none;
+            color: var(--ui-text);
+            cursor: pointer;
+            border-bottom: 0.0625rem solid transparent;
+            transition: all 0.3s ease;
+
+            &:hover {
+                border-color: var(--ui-accent);
+                color: var(--ui-accent);
+            }
+        }
+    }
+
+    textarea {
+        padding: 0.625rem;
+        padding-top: 0.4375rem;
+        font-family: inherit;
+        border: none;
+        border-radius: 0.3rem;
+        background-color: black;
+        box-shadow: 0rem 0rem 0rem 0.0625rem var(--ui-input-border);
+        border: 0.0625rem solid var(--ui-light);
+        cursor: pointer;
+        box-sizing: border-box;
+        outline-color: transparent;
+        outline-offset: 0.125rem;
+        transition: all 0.3s ease, width 0s ease, height 0s ease;
+        font-size: 0.9375rem;
+        font-weight: 400;
+        min-height: 2.375rem;
+        color: var(--ui-text);
+        resize: vertical;
+        appearance: none;
+        box-sizing: border-box;
+
+        &.resize-none {
+            resize: none;
+        }
+
+        &.resize-both {
+            resize: both;
+        }
+
+        &.resize-horizontal {
+            resize: horizontal;
+        }
+
+        &.resize-vertical {
+            resize: vertical;
+        }
+
+        &:read-only {
+            background-color: var(--ui-background-high);
+        }
+
+        &:-webkit-autofill {
+            box-shadow: 0 0 0 1.875rem var(--ui-input-autofill) inset,
+                0rem 0rem 0rem 0.0625rem var(--ui-input-autofill-border) !important;
+
+            &:hover,
+            &:focus,
+            &:active {
+                box-shadow: 0 0 0 1.875rem var(--ui-input-autofill) inset,
+                    0rem 0rem 0rem 0.0625rem var(--ui-input-autofill-border) !important;
+            }
+        }
+    }
+}
+
+.form-textarea-wrapper {
+    &.invalid {
+        textarea {
+            box-shadow: 0rem 0rem 0rem 0.0625rem var(--ui-input-invalid-border);
+
+            &:focus {
+                outline-style: solid;
+                outline-width: 0.125rem;
+                outline-color: var(--ui-error);
+            }
+        }
+
+        .icon {
+            color: var(--ui-error);
+
+            &::after {
+                background-color: var(--ui-error);
+                opacity: 0.1;
+            }
+        }
+    }
+}
+
+.form-textarea-label {
+    color: var(--ui-dark);
+    box-sizing: border-box;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    display: block;
+    text-align: left;
+    position: relative;
+    display: block;
+    margin-bottom: 0.3125rem;
+}
+
+.form-textarea-wrapper {
+    &.required .form-textarea-label::after {
+        content: '*';
+        color: var(--ui-error);
+        margin-left: 0.125rem;
+    }
+
+    .form-textarea :focus {
+        outline-style: solid;
+        outline-width: 0.125rem;
+        outline-color: var(--ui-accent);
+    }
+}

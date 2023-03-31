@@ -9,11 +9,15 @@ export function HomePage() {
         <div className="slide-bg"></div>
         <div className="slide-content">
           <h1>
-            DALL·E, GPT, Midjourney, Stable Diffusion, ChatGPT Prompt
-            Marketplace
+            <span>
+              DALL·E, GPT, Midjourney, Stable Diffusion, ChatGPT Prompt
+              Marketplace
+            </span>
           </h1>
           <h3>
-            <span>prompt-mkt</span> provides an effective platform for searching, creating or selling custom prompts and allows you to save API costs
+            <span>prompt-mkt</span> provides an effective platform for
+            searching, creating or selling custom prompts and allows you to save
+            API costs
           </h3>
           <div className="buttons-group">
             <button className="primary">
