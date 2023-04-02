@@ -1,0 +1,87 @@
+.accordion {
+    .accordion-item {
+        background-color: rgba(255, 255, 255, .01);
+        box-shadow: 0rem 0rem 0.1875rem 0rem var(--ui-background-low);
+        border-radius: 0.3rem;
+        margin-top: 0.625rem;
+        margin-bottom: 0.625rem;
+        box-sizing: border-box;
+    }
+
+    .accordion-item-header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        cursor: pointer;
+        padding: 1.25rem;
+        background-color: rgba(255, 255, 255, .02);
+        border-radius: 0.3rem;
+        box-sizing: border-box;
+        outline: 0.125rem solid transparent;
+        user-select: none;
+
+        &:focus-visible {
+            outline-color: var(--ui-accent);
+        }
+
+        h2 {
+            font-weight: 400;
+            font-size: inherit;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        .main-icon-wrapper {
+            transition: all 0.3s ease;
+            width: 2rem;
+
+            &.hidden {
+                opacity: 0;
+                width: 0;
+                overflow: hidden;
+            }
+
+            .main-icon {
+                margin-right: 0.9375rem;
+                color: white;
+                filter: drop-shadow(0rem 0.3125rem 0.75rem var(--ui-accent));
+
+                &.error {
+                    color: var(--ui-error);
+                    filter: drop-shadow(0rem 0.3125rem 0.75rem var(--ui-error));
+                }
+            }
+        }
+    }
+
+    .accordion-item[aria-expanded='true'] .accordion-item-header {
+        border-radius: 0.3rem 0.3125rem 0rem 0rem;
+    }
+
+    .accordion-item-header p {
+        width: 100%;
+        margin: 0;
+    }
+
+    .accordion-item-body {
+        padding: 1.25rem;
+        box-sizing: border-box;
+        transition: all 0.2s ease;
+        max-height: 20rem;
+        overflow: auto;
+
+        pre {
+            font: inherit;
+            white-space: pre-wrap;
+        }
+
+        &.hidden {
+            opacity: 0;
+            max-height: 0rem;
+            padding-top: 0;
+            padding-bottom: 0;
+            overflow: hidden;
+        }
+    }
+}

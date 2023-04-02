@@ -66,9 +66,9 @@
     }
 
     &.primary {
-        background-color: var(--ui-accent);
+        background-color: white;
         box-shadow: 0rem 0.3125rem 1.25rem -0.9375rem var(--ui-accent);
-        color: white;
+        color: black;
 
         &:hover {
             box-shadow: 0rem 0.3125rem 1.25rem -0.625rem var(--ui-accent);
@@ -124,7 +124,7 @@
     .bi + span,
     span + .bi,
     .bi + .bi {
-        margin-left: 0.3rem;
+        margin-left: 0.4rem;
     }
 
     .ui-spinner {

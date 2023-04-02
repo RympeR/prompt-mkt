@@ -1,4 +1,5 @@
 import { BootstrapIcon } from "../../components/bootstrapIcon";
+import { Button } from "../../components/form/button";
 import { ProductCard } from "../../components/productCard";
 import "./index.scss";
 
@@ -20,14 +21,8 @@ export function HomePage() {
             API costs
           </h3>
           <div className="buttons-group">
-            <button className="primary">
-              <BootstrapIcon icon="search" />
-              <span>Find a prompt</span>
-            </button>
-            <button className="secondary">
-              <BootstrapIcon icon="shop" />
-              <span>Sell a prompt</span>
-            </button>
+            <Button primary={true} text="Find a prompt" icon="search" />
+            <Button text="Find a prompt" icon="shop" />
           </div>
         </div>
       </div>
@@ -50,10 +45,11 @@ export function HomePage() {
                 );
               })}
           </div>
-          <button>
-            <span>Browse marketplace</span>
-            <BootstrapIcon icon="arrow-up-right" />
-          </button>
+          <Button
+            iconPosition="right"
+            text="Browse marketplace"
+            icon="arrow-up-right"
+          />
         </div>
       </div>
       <div className="slide flex">
@@ -75,10 +71,11 @@ export function HomePage() {
                 );
               })}
           </div>
-          <button>
-            <span>Browse marketplace</span>
-            <BootstrapIcon icon="arrow-up-right" />
-          </button>
+          <Button
+            iconPosition="right"
+            text="Browse marketplace"
+            icon="arrow-up-right"
+          />
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 export enum PromptType {
-  Gpt = "GPT / ChatGPT",
-  Dalle = "DALL·E",
+  GPT = "GPT / ChatGPT",
+  DALLE = "DALL·E",
   Midjourney = "Midjourney",
   StableDiffusion = "Stable Diffusion",
   PromptMKT = "PromptMKT",

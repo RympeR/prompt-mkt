@@ -1,5 +1,5 @@
 :root {
-  --ui-accent: #0059ff;
+  --ui-accent: #8900be;
   --ui-error: hsl(350, 100%, 58%);
   --ui-info: hsl(216, 100%, 58%);
   --ui-success: #07bc0c;
@@ -92,7 +92,7 @@ html {
   }
 }
 
-.page {
+.page, .fade-in {
   animation: fade-in 300ms;
 }
 
@@ -184,36 +184,6 @@ html {
       +button {
         margin: auto;
         margin-top: 40px;
-      }
-    }
-
-    button {
-      padding: 10px;
-      padding-left: 20px;
-      padding-right: 20px;
-      box-sizing: border-box;
-      border: none;
-      appearance: none;
-      background-color: rgba(255, 255, 255, .1);
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-      display: flex;
-      gap: 8px;
-
-      &.primary {
-        background-color: white;
-        color: black;
-      }
-
-      &:hover {
-        opacity: .8;
-      }
-
-      &:active {
-        opacity: .5;
       }
     }
   }
