@@ -1,17 +1,16 @@
 from xml.dom import ValidationErr
-from core.utils.customFields import TimestampField
-from core.utils.func import return_file_url
+from prompt_mkt.utils.customFields import TimestampField
+from prompt_mkt.utils.func import return_file_url
 from rest_framework import serializers
 
-from apps.blog.models import Attachment
-from apps.blog.serializers import AttachmentSerializer
-from apps.users.dynamic_preferences_registry import ReferralPercentage
+from apps.shop.models import Attachment
+from apps.shop.serializers import AttachmentSerializer
 from apps.users.models import User
 from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
                                     UserShortRetrieveSeriliazer,
                                     UserShortSocketRetrieveSeriliazer)
 
-from .models import Chat, ChatBought, Room, UserMessage
+from .models import Chat, Room, UserMessage
 
 
 class RoomGetSerializer(serializers.ModelSerializer):
@@ -184,32 +183,3 @@ class RoomInviteUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = 'invited',
-
-
-class ChatBoughtCreateSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        required=False, queryset=User.objects.all())
-    chat = serializers.PrimaryKeyRelatedField(
-        required=False, queryset=Chat.objects.all())
-    amount = serializers.IntegerField(required=False)
-
-    class Meta:
-        model = ChatBought
-        fields = '__all__'
-
-    def validate(self, attrs):
-        request = self.context.get('request')
-        user = request.user
-        attrs['user'] = user
-        if user.credit_amount >= attrs['amount']:
-            user.credit_amount -= attrs['amount']
-            attrs['chat'].user.earned_credits_amount += attrs['amount']
-            attrs['chat'].user.save()
-            referrer = attrs['chat'].user.referrer
-            if referrer:
-                referrer.earned_credits_amount += attrs['amount'] * \
-                    ReferralPercentage.value()
-                referrer.save()
-            user.save()
-            return attrs
-        raise serializers.ValidationError

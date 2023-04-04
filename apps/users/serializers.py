@@ -63,7 +63,7 @@ class UserSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'social_links', 'custom_prompt_price',
+            'id', 'social_links', 'custom_prompt_price',
             'sale_notification_emails', 'new_favorites_emails', 'new_followers_emails', 'new_messages_emails',
             'new_job_emails', 'new_review_emails', 'new_credits_emails', 'review_reminder_emails',
             'following_users_new_prompts'
@@ -100,6 +100,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
+            'id',
             'username',
             'avatar',
             'background_photo',
@@ -176,6 +177,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
+            'id',
             'username',
             'avatar',
             'background_photo',
