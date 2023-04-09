@@ -1,17 +1,17 @@
 from rest_framework import generics, permissions, views
+from rest_framework import status
 from rest_framework.authtoken.models import Token
+from rest_framework.mixins import UpdateModelMixin
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from apps.shop.models import Prompt
 from prompt_mkt.utils.default_responses import api_created_201, api_block_by_policy_451, api_bad_request_400, \
     api_accepted_202, api_not_found_404
+from .models import User, Subscription, Like
 from .serializers import CustomUserSerializer, UserRegisterSerializer, UserLoginSerializer, UserProfileSerializer, \
     UserFavouritesSerializer, UserPartialSerializer, UserSettingsSerializer, \
     UserGetProfileSerializer, SubscriptionCreateSerializer, LikeCreateSerializer
-from .models import User, Subscription, Like
-from apps.shop.models import Prompt
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.mixins import UpdateModelMixin
 
 
 class ProfileView(generics.RetrieveAPIView):
@@ -56,7 +56,7 @@ class UserLoginView(views.APIView):
 
 
 class MarkFavourite(generics.GenericAPIView):
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = UserFavouritesSerializer
     queryset = User.objects.all()
 
@@ -150,7 +150,6 @@ class CreateLikeView(generics.CreateAPIView):
     queryset = Like.objects.all()
     serializer_class = LikeCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
-
 
 
 class DeleteSubscriptionsView(generics.DestroyAPIView):
