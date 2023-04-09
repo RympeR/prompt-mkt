@@ -1,15 +1,17 @@
-import smtplib 
-from email.MIMEMultipart import MIMEMultipart 
-from email.MIMEText import MIMEText
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
-port_number =1234
-msg = MIMEMultipart()
-msg['From'] = 'sender@protonmail.com'
-msg['To'] = 'receiver@protonmail.com'
-msg['Subject'] = 'My Test Mail '
-message = 'This is the body of the mail'
-msg.attach(MIMEText(message))
-mailserver = smtplib.SMTP('localhost',port_number)
-mailserver.login("sender@protonmail.com", "mypassword")
-mailserver.sendmail('sender@protonmail.com','receiver@protonmail.com',msg.as_string())
-mailserver.quit()
+message = Mail(
+    from_email='eventure.support@protonmail.com',
+    to_emails='georg.rashkov@gmail.com',
+    subject='Sending with Twilio SendGrid is Fun',
+    html_content='<strong>and easy to do anywhere, even with Python</strong>')
+try:
+    sg = SendGridAPIClient('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')
+    response = sg.send(message)
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)
+except Exception as e:
+    print(e.message)
